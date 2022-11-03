@@ -20,10 +20,22 @@ export default function AddInstitute() {
     const [institueAddress, setInstitueAddress] = useState('')
     const [mobile, setMobile] = useState('')
     const [email, setEmail] = useState('')
+    const [errors, setErrors] = useState({})
     const classes = useStyles();
+
+    const validate = () => {
+        let temp = {}
+        temp.institueName = institueName ? "" : "Required"
+        temp.institueDescription = institueDescription ? "" : "Required"
+        temp.institueAddress = institueAddress ? "" : "Required"
+        temp.mobile = mobile ? "" : "Required"
+        temp.email = (/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/).test(email)?"":"Email format is incorrect"
+        setErrors({ ...temp })
+    }
 
     const handleClick = (e) => {
         e.preventDefault()
+        validate()
         const institue = { institueName, institueDescription, institueAddress, mobile, email }
         fetch("https://8080-fedcbfaffcaaaccfdfdccabcfdabdcccb.examlyiopb.examly.io/admin/addInstitue", {
             method: "POST",
@@ -49,22 +61,32 @@ export default function AddInstitute() {
                         <TextField id="academyName" label="Institue Name" variant="outlined" fullWidth
                             value={institueName}
                             onChange={(e) => setInstitueName(e.target.value)}
+                            error={errors.institueName}
+                            helperText="Required"
                         />
                         <TextField id="academyLocation" label="Institue Address" variant="outlined" fullWidth
                             value={institueAddress}
                             onChange={(e) => setInstitueAddress(e.target.value)}
+                            error={errors.institueAddress}
+                            helperText="Required"
                         />
                         <TextField id="contactNumber" label="Mobile" variant="outlined" fullWidth
                             value={mobile}
                             onChange={(e) => setMobile(e.target.value)}
+                            error={errors.mobile}
+                            helperText="Required"
                         />
                         <TextField id="emailId" label="Email" variant="outlined" fullWidth
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            error={errors.email}
+                            helperText="Email format is incorrect"
                         />
                         <TextField id="academyDescription" label="Institue Description" variant="outlined" fullWidth
                             value={institueDescription}
                             onChange={(e) => setInstitueDescription(e.target.value)}
+                            error={errors.institueDescription}
+                            helperText="Required"
                         />
                         <Button id="addAcademy" variant="contained" color="secondary" onClick={handleClick}>
                             Add Academy

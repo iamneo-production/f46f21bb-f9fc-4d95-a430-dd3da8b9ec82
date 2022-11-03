@@ -19,7 +19,16 @@ export default function Login() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [notadmin, setNotadmin] = useState(false)
   const [admin, setAdmin] = useState(false)
+  const [errors, setErrors] = useState({})
+
   const classes = useStyles();
+
+  const validate = () => {
+    let temp = {}
+    temp.email = (/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/).test(email)?"":"Email format is incorrect"
+    temp.password = password?"":"Password is required" 
+    setErrors({...temp})
+  }
 
   const redirectSignup = (e) => {
     e.preventDefault()
@@ -28,6 +37,7 @@ export default function Login() {
 
   const handleClick = (e) => {
     e.preventDefault()
+    validate()
     fetch("https://8080-fedcbfaffcaaaccfdfdccabcfdabdcccb.examlyiopb.examly.io/admin/login/" + email + "/" + password, {
       method: "GET",
       headers: { Accept: 'application/json', "Content-Type": "application/json" },
@@ -76,15 +86,18 @@ export default function Login() {
       <Container>
         <Paper elevation={3} style={paperStyle}>
           <h1>Login</h1>
-
           <form className={classes.root} noValidate autoComplete="off">
             <TextField id="email" label="Email" variant="outlined" fullWidth
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              error={errors.email}
+              helperText = "Email format incorrect"
             />
             <TextField id="password" type="password" label="Password" variant="outlined" fullWidth
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={errors.password}
+              helperText = "Password required"
             />
             <Button id="loginButton" variant="contained" color="secondary" onClick={handleClick}>
               Login

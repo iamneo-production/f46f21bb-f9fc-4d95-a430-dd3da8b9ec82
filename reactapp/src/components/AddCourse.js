@@ -18,10 +18,20 @@ export default function AddCourse() {
     const [courseName, setCourseName] = useState('')
     const [courseDescription, setCourseDescription] = useState('')
     const [courseDuration, setCourseDuration] = useState()
+    const [errors, setErrors] = useState({})
     const classes = useStyles();
+
+    const validate = () => {
+        let temp = {}
+        temp.courseName = courseName ? "" : "Required"
+        temp.courseDescription = courseDescription ? "" : "Required"
+        temp.courseDuration = courseDuration ? "" : "Required"
+        setErrors({ ...temp })
+    }
 
     const handleClick = (e) => {
         e.preventDefault()
+        validate()
         setCourseDuration(Number(courseDuration))
         const course = { courseName, courseDescription, courseDuration }
         fetch("https://8080-fedcbfaffcaaaccfdfdccabcfdabdcccb.examlyiopb.examly.io/admin/addCourse", {
@@ -48,14 +58,20 @@ export default function AddCourse() {
                         <TextField id="courseName" label="Course Name" variant="outlined" fullWidth
                             value={courseName}
                             onChange={(e) => setCourseName(e.target.value)}
+                            error={errors.courseName}
+                            helperText="Required"
                         />
                         <TextField id="courseDescription" label="Course Description" variant="outlined" fullWidth
                             value={courseDescription}
                             onChange={(e) => setCourseDescription(e.target.value)}
+                            error={errors.courseDescription}
+                            helperText="Required"
                         />
                         <TextField id="courseDuration" label="Course Duration" variant="outlined" fullWidth
                             value={courseDuration}
                             onChange={(e) => setCourseDuration(e.target.value)}
+                            error={errors.courseDuration}
+                            helperText="Required"
                         />
                         <Button id="addCourse" variant="contained" color="secondary" onClick={handleClick}>
                             Add Course

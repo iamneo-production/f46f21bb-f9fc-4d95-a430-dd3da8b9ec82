@@ -19,8 +19,18 @@ export default function Signup() {
     const [username, setUsername] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
     const [userRole, setUserRole] = useState('')
+    const [errors, setErrors] = useState({})
     const classes = useStyles();
 
+    const validate = () => {
+        let temp = {}
+        temp.email = (/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/).test(email) ? "" : "Email format is incorrect"
+        temp.password = password ? "" : "Password is required"
+        temp.username = username ? "" : "Required"
+        temp.mobileNumber = mobileNumber ? "" : "Required"
+        temp.userRole = userRole ? "" : "Required"
+        setErrors({ ...temp })
+    }
 
     const redirectLogin = (e) => {
         e.preventDefault()
@@ -29,6 +39,7 @@ export default function Signup() {
 
     const handleClick = (e) => {
         e.preventDefault()
+        validate()
         const user = { email, password, username, mobileNumber, userRole }
         fetch("https://8080-fedcbfaffcaaaccfdfdccabcfdabdcccb.examlyiopb.examly.io/admin/signup", {
             method: "POST",
@@ -56,24 +67,34 @@ export default function Signup() {
                         <TextField id="admin/user" label="User Role (ADMIN/USER)" variant="outlined" fullWidth
                             value={userRole}
                             onChange={(e) => setUserRole(e.target.value)}
+                            error={errors.userRole}
+                            helperText="Required"
                         />
                         <TextField id="email" label="Email" variant="outlined" fullWidth
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            error={errors.email}
+                            helperText="Email format incorrect"
                         />
                         <TextField id="username" label="Username" variant="outlined" fullWidth
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            error={errors.username}
+                            helperText="Required"
                         />
                         <TextField id="mobileNumber" label="Mobile Number" variant="outlined" fullWidth
                             value={mobileNumber}
                             onChange={(e) => setMobileNumber(e.target.value)}
+                            error={errors.mobileNumber}
+                            helperText="Required"
                         />
                         <TextField id="password" type="Password" label="Password" variant="outlined" fullWidth
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            error={errors.password}
+                            helperText="Required"
                         />
-                        <TextField id="confirmPassword" type="Password" label="Confirm Password" variant="outlined" fullWidth />
+                        <TextField id="confirmPassword" type="Password" label="Confirm Password" variant="outlined" fullWidth helperText="Required"/>
                         <Button id="submitButton" variant="contained" color="secondary" onClick={handleClick}>
                             Signup
                         </Button>

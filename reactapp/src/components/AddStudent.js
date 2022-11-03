@@ -20,10 +20,22 @@ export default function AddStudent() {
     const [address, setAddress] = useState('')
     const [mobile, setMobile] = useState('')
     const [age, setAge] = useState()
+    const [errors, setErrors] = useState({})
     const classes = useStyles();
 
+    const validate = () => {
+        let temp = {}
+        temp.studentName = studentName ? "" : "Required"
+        temp.studentDOB = studentDOB ? "" : "Required"
+        temp.address = address ? "" : "Required"
+        temp.mobile = mobile ? "" : "Required"
+        temp.age = age ? "" : "Required"
+        setErrors({ ...temp })
+    }
+    
     const handleClick = (e) => {
         e.preventDefault()
+        validate()
         setAge(Number(age))
         const student = { studentName, studentDOB, address, mobile, age }
         fetch("https://8080-fedcbfaffcaaaccfdfdccabcfdabdcccb.examlyiopb.examly.io/admin/addStudent", {
@@ -50,22 +62,32 @@ export default function AddStudent() {
                         <TextField id="studentName" label="Student Name" variant="outlined" fullWidth
                             value={studentName}
                             onChange={(e) => setStudentName(e.target.value)}
+                            error={errors.studentName}
+                            helperText="Required"
                         />
                         <TextField id="studentDOB" label="Student DOB (DD-MM-YYYY)" variant="outlined" fullWidth
                             value={studentDOB}
                             onChange={(e) => setStudentDOB(e.target.value)}
+                            error={errors.studentDOB}
+                            helperText="Required"
                         />
                         <TextField id="address" label="Address" variant="outlined" fullWidth
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
+                            error={errors.address}
+                            helperText="Required"
                         />
                         <TextField id="mobile" label="Mobile" variant="outlined" fullWidth
                             value={mobile}
                             onChange={(e) => setMobile(e.target.value)}
+                            error={errors.mobile}
+                            helperText="Required"
                         />
                         <TextField id="age" label="Age" variant="outlined" fullWidth
                             value={age}
                             onChange={(e) => setAge(e.target.value)}
+                            error={errors.age}
+                            helperText="Required"
                         />
                         <Button id="addStudent" variant="contained" color="secondary" onClick={handleClick}>
                             Add Student

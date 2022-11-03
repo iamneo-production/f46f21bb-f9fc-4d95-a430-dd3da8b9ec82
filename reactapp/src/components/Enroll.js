@@ -24,12 +24,25 @@ export default function Enroll() {
     const [address, setAddress] = useState('')
     const [mobile, setMobile] = useState('')
     const [age, setAge] = useState()
+    const [errors, setErrors] = useState({})
     const classes = useStyles();
+
+    const validate = () => {
+        let temp = {}
+        temp.courseId = courseId ? "" : "Required"
+        temp.name = name ? "" : "Required"
+        temp.dob = dob ? "" : "Required"
+        temp.address = address ? "" : "Required"
+        temp.mobile = mobile ? "" : "Required"
+        temp.age = age ? "" : "Required"
+        setErrors({ ...temp })
+    }
 
     const handleClick = (e) => {
         e.preventDefault()
+        validate()
         setCourseId(Number(courseId))
-        const admission = {studentId, courseId, institueId, status}
+        const admission = { studentId, courseId, institueId, status }
         const student = { name, dob, address, mobile, age }
         console.log(student)
         console.log(admission)
@@ -57,26 +70,38 @@ export default function Enroll() {
                         <TextField id="courseId" label="Course Id" variant="outlined" fullWidth
                             value={courseId}
                             onChange={(e) => setCourseId(e.target.value)}
+                            error={errors.courseId}
+                            helperText="Required"
                         />
                         <TextField id="name" label="Name" variant="outlined" fullWidth
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            error={errors.name}
+                            helperText="Required"
                         />
                         <TextField id="dob" label="DOB (DD-MM-YYYY)" variant="outlined" fullWidth
                             value={dob}
                             onChange={(e) => setDob(e.target.value)}
+                            error={errors.dob}
+                            helperText="Required"
                         />
                         <TextField id="address" label="Address" variant="outlined" fullWidth
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
+                            error={errors.address}
+                            helperText="Required"
                         />
                         <TextField id="mobile" label="Mobile" variant="outlined" fullWidth
                             value={mobile}
                             onChange={(e) => setMobile(e.target.value)}
+                            error={errors.mobile}
+                            helperText="Required"
                         />
                         <TextField id="age" label="Age" variant="outlined" fullWidth
                             value={age}
                             onChange={(e) => setAge(e.target.value)}
+                            error={errors.age}
+                            helperText="Required"
                         />
                         <Button id="submitButton" variant="contained" color="secondary" onClick={handleClick}>
                             Enroll Now

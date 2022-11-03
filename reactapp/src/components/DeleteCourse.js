@@ -16,15 +16,22 @@ const useStyles = makeStyles((theme) => ({
 export default function DeleteCourse() {
     const paperStyle = { padding: '50px 20px', width: 600, margin: "20px auto" }
     const [courseId, setCourseId] = useState()
-
+    const [errors, setErrors] = useState({})
     const classes = useStyles();
+
+    const validate = () => {
+        let temp = {}
+        temp.courseId = courseId ? "" : "Required"
+        setErrors({ ...temp })
+    }
 
     const handleClick = (e) => {
         e.preventDefault()
+        validate()
         fetch("https://8080-fedcbfaffcaaaccfdfdccabcfdabdcccb.examlyiopb.examly.io/admin/deleteCourse/" + courseId, {
             method: "DELETE",
             headers: { Accept: 'application/json', "Content-Type": "application/json" },
-        //     body: JSON.stringify(institue)
+            //     body: JSON.stringify(institue)
         }).then(response => {
             // console.log(response)
             if (response.ok === true) {
@@ -50,6 +57,8 @@ export default function DeleteCourse() {
                                 <TextField id="deleteCourse" label="Course ID" variant="outlined" fullWidth
                                     value={courseId}
                                     onChange={(e) => setCourseId(e.target.value)}
+                                    error={errors.courseId}
+                                    helperText="Required"
                                 />
                             </div>
                         </div>
